@@ -1,0 +1,33 @@
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  bio TEXT DEFAULT '',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS posts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  cover_image TEXT,
+  tags TEXT DEFAULT '',
+  author_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  status TEXT NOT NULL DEFAULT 'published' CHECK (status IN ('draft','published')),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS comments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  post_id INTEGER NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
+  author_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  content TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_posts_author ON posts(author_id);
+CREATE INDEX IF NOT EXISTS idx_posts_status ON posts(status);
+CREATE INDEX IF NOT EXISTS idx_posts_title ON posts(title);
+CREATE INDEX IF NOT EXISTS idx_comments_post ON comments(post_id);

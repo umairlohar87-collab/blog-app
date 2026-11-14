@@ -1,0 +1,17 @@
+{
+  "name": "blog-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-stack blog: React + Vite frontend, Express + SQLite backend",
+  "scripts": {
+    "dev": "concurrently -n server,client -c blue,magenta \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "install:all": "npm install && npm --prefix server install && npm --prefix client install",
+    "seed": "node server/utils/seed.js",
+    "start": "npm --prefix server start",
+    "build": "npm --prefix client run build"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^9.2.5"
+  }
+}
